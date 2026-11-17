@@ -6,55 +6,89 @@
 /*   By: agarin <agarin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/11/16 18:24:25 by agarin            #+#    #+#             */
-/*   Updated: 2026/11/16 21:15:01 by agarin           ###   ########.fr       */
+/*   Updated: 2026/11/17 17:55:23 by agarin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
 
-int ft_print_c(va_list args)
+int	ft_print_c(char c)
 {
-	char c;
-
-	c = (char)va_arg(args, int);
 	write(1, &c, 1);
 	return (1);
 }
 
-int ft_print_s(va_list args)
+int	ft_print_s(char *str)
 {
-	char *str;
-	int strl;
+	int	strl;
 
-	str = (char *)va_arg(args, char *);
+	if (!str)
+	{
+		write(1, "(null)", 6);
+		return (6);
+	}
+	if (!*str)
+		return (0);
 	strl = ft_strlen(str);
 	write(1, str, strl);
 	return (strl);
 }
 
-int ft_print_base(int deci, char *base)
+int	ft_print_base(long long integer, char *base)
 {
-	int n;
-	int base_s;
+	int	n;
+	int	base_s;
 
 	base_s = ft_strlen(base);
 	n = 0;
-	if (deci == 0)
+	if (integer == 0)
 	{
 		write(1, "0", 1);
 		return (1);
 	}
-	if (deci < 0)
+	if (integer < 0)
 	{
 		write(1, "-", 1);
-		deci = -deci;
+		integer = -integer;
 		n++;
 	}
-	if (deci >= 16)
-		n += 1 + ft_print_base(deci / base_s, base);
+	if (integer >= base_s)
+		n += 1 + ft_print_base(integer / base_s, base);
 	else
 		n++;
-	write(1, "0123456789abcdef" + deci % base_s, 1);
-	deci /= 16;
+	write(1, base + integer % base_s, 1);
+	integer /= base_s;
 	return (n);
+}
+
+int	ft_print_unsigned_base(unsigned long long integer, char *base)
+{
+	int				n;
+	unsigned int	base_s;
+
+	base_s = ft_strlen(base);
+	n = 0;
+	if (integer == 0)
+	{
+		write(1, "0", 1);
+		return (1);
+	}
+	if (integer >= base_s)
+		n += 1 + ft_print_unsigned_base(integer / base_s, base);
+	else
+		n++;
+	write(1, base + integer % base_s, 1);
+	integer /= base_s;
+	return (n);
+}
+
+int	ft_print_pointer(unsigned long long deci)
+{
+	if (deci == 0)
+	{
+		write(1, "(nil)", 5);
+		return (5);
+	}
+	write(1, "0x", 2);
+	return (2 + ft_print_unsigned_base(deci, "0123456789abcdef"));
 }

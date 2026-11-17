@@ -1,12 +1,29 @@
-#include <stdarg.h>
-#include <unistd.h>
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_printf.h                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: agarin <agarin@student.42.fr>              +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/11/17 17:50:52 by agarin            #+#    #+#             */
+/*   Updated: 2026/11/17 17:54:28 by agarin           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
-//#include "ft_printf_formats.c"
+#ifndef FT_PRINTF_H
+# define FT_PRINTF_H
 
-int ft_printf(const char *, ...);
+# include <stdarg.h>
+# include <unistd.h>
 
-int ft_print_c(va_list args);
-int ft_print_s(va_list args);
-int ft_print_base(int deci, char *base);
+int	ft_printf(const char *format, ...);
 
-int ft_strlen(char *);
+int	ft_print_c(char c);
+int	ft_print_s(char *str);
+int	ft_print_base(long long integer, char *base);
+int	ft_print_unsigned_base(unsigned long long integer, char *base);
+int	ft_print_pointer(unsigned long long deci);
+
+int	ft_strlen(char *str);
+
+#endif
